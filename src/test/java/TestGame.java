@@ -55,4 +55,11 @@ public class TestGame {
 
         assertEquals(3 + 7 + 5, score);
     }
+
+    @Test (expected = CannotPlayMoreThanTenFrameException.class)
+    public void playMoreThanTenFrames_throwException() throws Exception {
+        for (int i = 0; i < 11; i++) {
+            game.play(new Frame(2,3));
+        }
+    }
 }
