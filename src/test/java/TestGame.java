@@ -14,18 +14,8 @@ public class TestGame {
     }
 
     @Test
-    public void zeroPinsdown_scoreZero() throws Exception {
-        game.play(new Frame(0,0));
-        int score = game.score();
-        assertEquals(0, score);
-    }
-
-    @Test
-    public void xPinsdown_scoreX() throws Exception {
-        int pinsDown = 3;
-        game.play(new Frame(pinsDown,0));
-        int score = game.score();
-        assertEquals(pinsDown, score);
+    public void noFramesPlayed_scoreZero() throws Exception {
+        assertEquals(0, game.score());
     }
 
     @Test
@@ -33,11 +23,6 @@ public class TestGame {
         game.play(new Frame(3,4));
         int score = game.score();
         assertEquals(3 + 4, score);
-    }
-
-    @Test (expected = InvalidFrameException.class)
-    public void invalidFrame_ThrowInvalidFrameException() throws Exception {
-        new Frame(5,6);
     }
 
     @Test
@@ -55,13 +40,12 @@ public class TestGame {
         When a spare is played, the bonus for that frame is the number of pins knocked down by the next roll.
          */
         Frame spare = new Frame(3, 7);
-        game.play(spare);
         Frame secondFrame = new Frame(8, 0);
+        game.play(spare);
         game.play(secondFrame);
         int bonus = 8;
-        int score = game.score();
 
-        assertEquals(3 + 7 + bonus + 8, score);
+        assertEquals(3 + 7 + bonus + 8, game.score());
     }
 
     @Test
@@ -73,16 +57,18 @@ public class TestGame {
         assertEquals(1 + 2 + 3 + 4, game.score(1));
     }
 
+    @Test
+    @Ignore
+    public void strike_scoreIsSumPlusStrikeBonus() throws Exception {
+        /*
+        When a strike is played the bonus is equal to the sum of pins down in the next 2 balls roll
+         */
+        Frame strike = new Frame(10,0);
+        game.play(strike);
 
+        game.play(new Frame(4,5));
 
-    // todo exception frame out bound
-    // todo exception when trying to get score for a point that is awaiting spare
-
-    @Test (expected = MaxFrameIsTen.class)
-    public void playMoreThanTenFrames_throwException() throws Exception {
-        for (int i = 0; i < 11; i++) {
-            game.play(new Frame(2,3));
-        }
+        assertEquals(10 + 4 + 5, game.score());
     }
 
     @Test
@@ -102,19 +88,5 @@ public class TestGame {
         game.play(new Frame(5,5));
         assertEquals(49, game.score());
 
-    }
-
-    @Test
-    @Ignore
-    public void strike_scoreIsSumPlusStrikeBonus() throws Exception {
-        /*
-        When a strike is played the bonus is equal to the sum of pins down in the next 2 balls roll
-         */
-        Frame strike = new Frame(10,0);
-        game.play(strike);
-
-        game.play(new Frame(4,5));
-
-        assertEquals(10 + 4 + 5, game.score());
     }
 }

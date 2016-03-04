@@ -14,9 +14,15 @@ public class Frame {
     }
 
     private void checkFrameValid() throws InvalidFrameException {
-        if (first + second > 10) {
+        if (isFrameInvalid()) {
             throw new InvalidFrameException("A frame can not knock more than 10 pins");
         }
+    }
+
+    private boolean isFrameInvalid() {
+        return first + second > 10 ||
+                first < 0 ||
+                second < 0;
     }
 
     public boolean isSpare() {
