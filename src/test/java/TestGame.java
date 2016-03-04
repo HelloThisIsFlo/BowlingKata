@@ -1,4 +1,5 @@
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -61,5 +62,31 @@ public class TestGame {
         for (int i = 0; i < 11; i++) {
             game.play(new Frame(2,3));
         }
+    }
+
+    @Test
+    public void testScenarioWithRealLifExample() throws Exception {
+        game.play(new Frame(1,4));
+        assertEquals(5, game.score());
+        game.play(new Frame(4,5));
+        assertEquals(14, game.score());
+        game.play(new Frame(6,4));
+        assertEquals(29, game.score());
+        game.play(new Frame(5,5));
+        assertEquals(49, game.score());
+    }
+
+    @Test
+    @Ignore
+    public void strike_scoreIsSumPlusStrikeBonus() throws Exception {
+        /*
+        When a strike is played the bonus is equal to the sum of pins down in the next 2 balls roll
+         */
+        Frame strike = new Frame(10,0);
+        game.play(strike);
+
+        game.play(new Frame(4,5));
+
+        assertEquals(10 + 4 + 5, game.score());
     }
 }
