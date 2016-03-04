@@ -14,7 +14,7 @@ public class TestGame {
 
     @Test
     public void zeroPinsdown_scoreZero() throws Exception {
-        game.play(0);
+        game.play(new Frame(0,0));
         int score = game.score();
         assertEquals(0, score);
     }
@@ -22,16 +22,37 @@ public class TestGame {
     @Test
     public void xPinsdown_scoreX() throws Exception {
         int pinsDown = 3;
-        game.play(pinsDown);
+        game.play(new Frame(pinsDown,0));
         int score = game.score();
         assertEquals(pinsDown, score);
     }
 
     @Test
-    public void representARoundWithFrames() throws Exception {
-        Frame firstRound = new Frame(0,0);
-        game.playWithFrames(firstRound);
+    public void playAFullFrame_scoreIsSum() throws Exception {
+        game.play(new Frame(3,4));
         int score = game.score();
-        assertEquals(0, score);
+        assertEquals(3 + 4, score);
+    }
+
+    @Test (expected = InvalidFrameException.class)
+    public void invalidFrame_ThrowInvalidFrameException() throws Exception {
+        new Frame(5,6);
+    }
+
+    @Test
+    public void play2Frames_scoreIsSumOfAllPinsDown() throws Exception {
+        game.play(new Frame(3,4));
+        game.play(new Frame(1,2));
+        int score = game.score();
+
+        assertEquals(3 + 4 + 2 + 1, score);
+    }
+
+    @Test
+    public void spare_scoreIsSumPlusBonus5() throws Exception {
+        game.play(new Frame(3,7));
+        int score = game.score();
+
+        assertEquals(3 + 7 + 5, score);
     }
 }
