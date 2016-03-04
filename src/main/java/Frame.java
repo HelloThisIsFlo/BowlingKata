@@ -6,7 +6,7 @@ public class Frame {
     public final int first;
     public final int second;
 
-    public Frame(int first, int second) throws InvalidFrameException{
+    public Frame(int first, int second) throws InvalidFrameException {
         this.first = first;
         this.second = second;
 

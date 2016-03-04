@@ -50,14 +50,35 @@ public class TestGame {
     }
 
     @Test
-    public void spare_scoreIsSumPlusBonus5() throws Exception {
-        game.play(new Frame(3,7));
+    public void spare_scoreIsSumPlusSpareBonus() throws Exception {
+        /*
+        When a spare is played, the bonus for that frame is the number of pins knocked down by the next roll.
+         */
+        Frame spare = new Frame(3, 7);
+        game.play(spare);
+        Frame secondFrame = new Frame(8, 0);
+        game.play(secondFrame);
+        int bonus = 8;
         int score = game.score();
 
-        assertEquals(3 + 7 + 5, score);
+        assertEquals(3 + 7 + bonus + 8, score);
     }
 
-    @Test (expected = CannotPlayMoreThanTenFrameException.class)
+    @Test
+    public void getScoreForASpecificFrame() throws Exception {
+        game.play(new Frame(1,2));
+        game.play(new Frame(3,4));
+
+        assertEquals(1 + 2, game.score(0));
+        assertEquals(1 + 2 + 3 + 4, game.score(1));
+    }
+
+
+
+    // todo exception frame out bound
+    // todo exception when trying to get score for a point that is awaiting spare
+
+    @Test (expected = MaxFrameIsTen.class)
     public void playMoreThanTenFrames_throwException() throws Exception {
         for (int i = 0; i < 11; i++) {
             game.play(new Frame(2,3));
@@ -65,7 +86,9 @@ public class TestGame {
     }
 
     @Test
+    @Ignore
     public void testScenarioWithRealLifExample() throws Exception {
+        // todo rewrite with frame specific scores (situation not possible described now (get score after spare/strike))
         game.play(new Frame(1,4));
         assertEquals(5, game.score());
         game.play(new Frame(4,5));
@@ -74,6 +97,11 @@ public class TestGame {
         assertEquals(29, game.score());
         game.play(new Frame(5,5));
         assertEquals(49, game.score());
+        game.play(new Frame(10,0));
+        assertEquals(60, game.score());
+        game.play(new Frame(5,5));
+        assertEquals(49, game.score());
+
     }
 
     @Test
